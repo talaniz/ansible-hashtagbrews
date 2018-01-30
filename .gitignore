@@ -1,2 +1,4 @@
 *.log
 .vagrant/**
+playbooks/hosts
+ansible.cfg

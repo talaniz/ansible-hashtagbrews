@@ -1,0 +1,37 @@
+- name: DigitalOcean basic Ubuntu setup
+  hosts: dev
+  sudo: True
+  tasks:
+    - name: Create new group 'htb'
+      group:
+         name: htb
+         state: present
+      become: true
+      become_method: sudo
+
+    - name: Allow 'htb' passwordless sudo
+      lineinfile:
+         dest: /etc/sudoers
+         state: present
+         regexp: '^%htb'
+         line: '%htb ALL=(ALL) NOPASSWD: ALL'
+      become: true
+      become_method: sudo
+
+    - name: Add new user to pelican group
+      user:
+           name: talaniz
+           shell: /bin/bash
+           groups: htb
+           append: yes
+      with_items: talaniz
+      become: true
+      become_method: sudo
+
+    - name: Set authorized key for user talaniz from current user
+      authorized_key:
+         user: talaniz
+         state: present
+         key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_rsa.pub') }}"
+      become: true
+      become_method: sudo
