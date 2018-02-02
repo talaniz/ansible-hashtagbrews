@@ -1,6 +1,5 @@
 - name: DigitalOcean basic Ubuntu setup
   hosts: dev
-  sudo: True
   tasks:
     - name: Create new group 'htb'
       group:
