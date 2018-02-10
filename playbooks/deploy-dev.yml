@@ -1,0 +1,5 @@
+---
+- name: Deploy to Vagrant dev instance
+  hosts: dev
+  roles:
+      - setup

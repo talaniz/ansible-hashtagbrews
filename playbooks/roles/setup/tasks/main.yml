@@ -1,0 +1,38 @@
+- name: Create new group
+  group:
+     name: htb
+     state: present
+  become: true
+  become_method: sudo
+
+- name: Allow group passwordless sudo
+  lineinfile:
+     dest: /etc/sudoers
+     state: present
+     regexp: '^%htb'
+     line: '%htb ALL=(ALL) NOPASSWD: ALL'
+  become: true
+  become_method: sudo
+
+- name: Add new user to group
+  user:
+       name: talaniz
+       shell: /bin/bash
+       groups: htb
+       append: yes
+  with_items: talaniz
+  become: true
+  become_method: sudo
+
+- name: Set authorized key for user from current user
+  authorized_key:
+     user: talaniz
+     state: present
+     key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_rsa.pub') }}"
+  become: true
+  become_method: sudo
+
+- name: Update apt-get
+  apt: update_cache=yes
+  become: true
+  become_method: sudo
