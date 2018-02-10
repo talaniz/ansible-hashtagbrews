@@ -2,3 +2,4 @@
 .vagrant/**
 playbooks/hosts
 ansible.cfg
+*.retry

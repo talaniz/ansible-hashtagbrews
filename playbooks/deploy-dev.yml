@@ -3,3 +3,4 @@
   hosts: dev
   roles:
       - setup
+      - django
